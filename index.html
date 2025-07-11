@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Load Web App Data</title>
+  <meta charset="UTF-8">
+  <title>Load Web App</title>
 </head>
 <body>
-  <h1>ข้อมูลจาก Google Web App</h1>
-  <div id="output">Loading...</div>
+  <h1>ข้อมูลจาก Web App</h1>
+  <pre id="output">Loading...</pre>
 
   <script>
     fetch("https://script.google.com/macros/s/AKfycbyX00s2m-WBib43p1IuoOHVOJ0GilTvkTyn85nPfBHxsi_9hUBf3LCGXO34uA7uFul2/exec")
-      .then(res => res.text()) // หรือ res.json() ถ้าเป็น API JSON
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.json(); // ถ้า API เป็น JSON
+      })
       .then(data => {
-        document.getElementById("output").innerHTML = data;
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
       })
       .catch(err => {
-        document.getElementById("output").innerText = "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-        console.error(err);
+        document.getElementById("output").textContent = "โหลดไม่ได้: " + err;
       });
   </script>
 </body>
